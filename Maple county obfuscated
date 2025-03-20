@@ -1,1 +1,1404 @@
-do local Library=loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))();local Window=Library.CreateLib("Shibu.xyz","DarkTheme");local Tab=Window:NewTab("main");local Section=Tab:NewSection("ESP (Mickey made this)");Section:NewButton("Normal Player esp","keybind is -",function() local lplr=game.Players.LocalPlayer;local camera=game:GetService("Workspace").CurrentCamera;local UserInputService=game:GetService("UserInputService");local RunService=game:GetService("RunService");local espActive=false;local Box=Drawing.new("Square");Box.Visible=false;Box.Color=Color3.fromRGB(255,0,0);Box.Thickness=3;Box.Transparency=1;Box.Filled=false;local HealthBar=Drawing.new("Line");HealthBar.Visible=false;HealthBar.Color=Color3.new(0,1,0);HealthBar.Thickness=2;local NameTag=Drawing.new("Text");NameTag.Visible=false;NameTag.Color=Color3.new(1,1,1);NameTag.Size=9;NameTag.Center=true;NameTag.Outline=true;NameTag.OutlineColor=Color3.new(0,0,0);local Tracer=Drawing.new("Line");Tracer.Visible=false;Tracer.Color=Color3.fromRGB(255,0,0);Tracer.Thickness=2;local function applyChams(character) if character:FindFirstChild("HumanoidRootPart") then for _,part in pairs(character:GetChildren()) do if (part:IsA("MeshPart") or part:IsA("Part")) then part.Material=Enum.Material.SmoothPlastic;part.Color=v.TeamColor.Color;end end end end local function updateEsp(v) if (v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("HumanoidRootPart") and (v~=lplr) and (v.Character.Humanoid.Health>0)) then local RootPart=v.Character.HumanoidRootPart;local Head=v.Character.Head;local RootPosition,onScreen=camera:worldToViewportPoint(RootPart.Position);local HeadPosition=camera:worldToViewportPoint(Head.Position);local LegPosition=camera:worldToViewportPoint(RootPart.Position-Vector3.new(0,3,0) );Box.Size=Vector2.new(1000/RootPosition.Z ,HeadPosition.Y-LegPosition.Y );Box.Position=Vector2.new(RootPosition.X-(Box.Size.X/2) ,RootPosition.Y-(Box.Size.Y/2) );local health=v.Character.Humanoid.Health/v.Character.Humanoid.MaxHealth ;HealthBar.From=Vector2.new(Box.Position.X + Box.Size.X + 5 ,Box.Position.Y + (Box.Size.Y * (1 -health)) );HealthBar.To=Vector2.new(Box.Position.X + Box.Size.X + 5 ,Box.Position.Y + Box.Size.Y );HealthBar.Color=Color3.new(1 -health ,health,0);NameTag.Position=Vector2.new(Box.Position.X + (Box.Size.X/2) ,Box.Position.Y-20 );NameTag.Text=v.Name;local lplrHead=lplr.Character:FindFirstChild("Head");if lplrHead then local lplrHeadViewport=camera:worldToViewportPoint(lplrHead.Position);Tracer.From=Vector2.new(lplrHeadViewport.X,lplrHeadViewport.Y);Tracer.To=Vector2.new(RootPosition.X,RootPosition.Y);end applyChams(v.Character);if onScreen then Box.Visible=true;HealthBar.Visible=true;NameTag.Visible=true;Tracer.Visible=true;else Box.Visible=false;HealthBar.Visible=false;NameTag.Visible=false;Tracer.Visible=false;end else Box.Visible=false;HealthBar.Visible=false;NameTag.Visible=false;Tracer.Visible=false;end end for i,v in pairs(game.Players:GetChildren()) do updateEsp(v);end game.Players.PlayerAdded:Connect(function(v) updateEsp(v);end);UserInputService.InputBegan:Connect(function(input,gameProcessed) if gameProcessed then return;end if (input.KeyCode==Enum.KeyCode.Minus) then espActive= not espActive;if  not espActive then Box.Visible=false;HealthBar.Visible=false;NameTag.Visible=false;Tracer.Visible=false;end end end);RunService.RenderStepped:Connect(function() if espActive then for _,player in pairs(game.Players:GetChildren()) do updateEsp(player);end end end);end);Section:NewButton("Mod Esp","keybind is +",function() local Players=game:GetService("Players");local UserInputService=game:GetService("UserInputService");local modUserIds={211408817,304478876,3233673077,275890432,4704223349,633752460,177822416,466131196,454578312};local function isPlayerMod(player) for _,userId in pairs(modUserIds) do if (player.UserId==userId) then return true;end end return false;end local function showModAboveHead(player) if isPlayerMod(player) then local head=player.Character and player.Character:FindFirstChild("Head") ;if head then local modLabel=Instance.new("BillboardGui");modLabel.Parent=head;modLabel.Adornee=head;modLabel.Size=UDim2.new(0,100,0,50);modLabel.StudsOffset=Vector3.new(0,3,0);local textLabel=Instance.new("TextLabel");textLabel.Parent=modLabel;textLabel.Text="MOD";textLabel.TextSize=20;textLabel.TextColor3=Color3.fromRGB(255,0,0);textLabel.BackgroundTransparency=1;textLabel.Size=UDim2.new(1,0,1,0);textLabel.TextAlign=Enum.TextAlign.Center;end end end UserInputService.InputBegan:Connect(function(input,gameProcessed) if gameProcessed then return;end if (input.KeyCode==Enum.KeyCode.Equals) then for _,player in pairs(Players:GetPlayers()) do showModAboveHead(player);end end end);end);local Section=Tab:NewSection("Fun Stuff (Mickey made this)");Section:NewButton("camlock","keybind is t",function() getgenv().NemesisPreBeta={Settings={Disabling={Toggle=false,Keybind="H"},UpdateTickDelay=0.05},Camlock={Toggling={Enable=true,Keybind="T"},Settings={Prediction={true,999.999,false,0.003},Smoothing={smoothness=false,x=0,y=0},OffSets={Jump={Enable=false,[1]=Vector3.new(0,1,0)}}},Conditions={Player={WallCheck=false,Grabbed=false,Knocked=false,CrewID=false},BodyParts={"Head"}}},Silent={Toggling={Enable=false},Settings={Prediction={true,0.11934,false,0.003},HitChance=100,Resolver=true,OffSets={Jump={Enable=false,[1]=Vector3.new(0,0,0)}}},Conditions={Player={WallCheck=false,Grabbed=false,Knocked=false,CrewID=false},BodyParts={"Head"}}},["Field Of View"]={Enable=true,Size=1000,Color=Color3.fromRGB(255,255,255)},Miscs={Sorting={Toggled=false,Key="F",alphabetically=true,Ammo=false,Custom={Enable=false,List={[1]="[Revolver]",[2]="[Chicken]"}}},Animation={Enable=true,Animations={Greet={[1]=false,[2]="V"}}}}};local DUpvalue,Round,V3,V2,CF,Rservice,UserInput,Ping,Mouse,backpack=debug.getupvalue,math.round,Vector3.new,Vector2.new,CFrame.new,game:GetService("RunService"),game:GetService("UserInputService"),game:GetService("Stats").PerformanceStats.Ping,game:GetService("Players").LocalPlayer:GetMouse(),game:GetService("Players").LocalPlayer.Backpack;local Players,Self,Character,Camera=game:GetService("Players"),game:GetService("Players").LocalPlayer,game:GetService("Players").LocalPlayer.Character or game:GetService("Players").LocalPlayer.CharacterAdded:Wait() ,game:GetService("Workspace").CurrentCamera;local idx,endp;local Storage={Drawings={},Connections={},targets={[1]=nil,[2]=nil},ValuePosition=nil,bodyparts={[1]="",[2]=""},update_tick=tick(),etc={Ctoggled=false,Mtoggled=false},items={}};function NewConnection(type,callback) local connection=type:Connect(callback);Storage.Connections[ #Storage.Connections + 1 ]=connection;return connection;end function Chance(chance,maxchance) return math.random(maxchance)<=chance ;end function Thread(Function,...) local co;local success,result;if (Function~=nil) then co=coroutine.create(Function);success,result=coroutine.resume(co,...);end if ((success~=nil) and (co~=nil) and (Function~=nil)) then return result;end end function wallcheck(origin) local parts=Camera:GetPartsObscuringTarget({origin.Position,Character.HumanoidRootPart.Position},{Camera,Character,origin.Parent});if ( #parts==0) then return true;end return false;end function Grabbed(player) if (player.Character~=nil) then return  not player.Character:FindFirstChild("GRABBING_CONSTRAINT");end end function Knocked(player) if (player.Character~=nil) then return player.Character.BodyEffects["K.O"].Value~=true ;end end local pingHistory={};local lastPingUpdateTime=tick();function GetPrediction() local currentPing=Ping:GetValue() * 0.003 ;if (getgenv().NemesisPreBeta.Camlock.Settings.Prediction[3] or getgenv().NemesisPreBeta.Silent.Settings.Prediction[3]) then return currentPing;else return getgenv().NemesisPreBeta.Camlock.Settings.Prediction[2] and getgenv().NemesisPreBeta.Silent.Settings.Prediction[2] ;end end function Crew(player) if game.Players.LocalPlayer:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew") then local SelfCrewValue=game.Players.LocalPlayer:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew");if (SelfCrewValue.Value~=0) then if player:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew") then local Enimy=player:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew");if (Enimy.Value==SelfCrewValue.Value) then return false;end end end end return true;end function Closespart(player,hitboxes) local closestPart;local closestDistanc=math.huge;for _,hitbox in pairs(hitboxes) do local part=player.Character:FindFirstChild(hitbox);if part then local pos=Camera:WorldToViewportPoint(part.Position);local distance=(UserInput:GetMouseLocation() -V2(pos.X,pos.Y)).Magnitude;if (distance<closestDistanc) then closestPart=part;closestDistanc=distance;end end end return closestPart;end function isInCustomList(toolName) for _,customName in ipairs(getgenv().NemesisPreBeta.Miscs.Sorting.Custom.List) do if (toolName==customName) then return true;end end return false;end function GetClosest(table) local MaxDistance=(getgenv().NemesisPreBeta["Field Of View"].Enable and getgenv().NemesisPreBeta["Field Of View"].Size) or math.huge ;local Target;for i,v in pairs(Players:GetPlayers()) do if ((v~=Self) and (v.Character~=nil) and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Head")) then local ViewPort,Visible=Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position);local Mag=(UserInput:GetMouseLocation() -Vector2.new(ViewPort.X,ViewPort.Y)).Magnitude;if ((MaxDistance>Mag) and Visible and ((table.WallCheck and wallcheck(v.Character.HumanoidRootPart)) or (true and table.Grabbed and Grabbed(v)) or (true and table.Knocked and Knocked(v)) or (true and table.CrewID and Crew(v)) or true)) then MaxDistance=Mag;Target=v;end end end return Target;end function Velocity(Target,method) if (method==true) then local pos=Target.Character.HumanoidRootPart.Position;local lastTime=tick();local currentPos,currentTime;local connection;connection=game:GetService("RunService").Heartbeat:Connect(function() currentPos=Target.Character.HumanoidRootPart.Position;currentTime=tick();connection:Disconnect();end);wait(0.01);local velocity=(currentPos-pos)/(currentTime-lastTime) ;return Vector3.new(math.floor(velocity.X),math.floor(velocity.Y),math.floor(velocity.Z));else return Target.character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity;end end function playAnimation(animationName) local args={[1]="AnimationPack",[2]=animationName};game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args));end function UpdateSilent() local SilentTable=getgenv().NemesisPreBeta.Silent;if SilentTable.Toggling.Enable then Storage.targets[2]=GetClosest(SilentTable.Conditions.Player);if ((Storage.targets[2]~=nil) and (Storage.targets[2].Character~=nil) and Storage.targets[2].Character:FindFirstChild("HumanoidRootPart")) then Storage.bodyparts[2]=tostring(Closespart(Storage.targets[2],SilentTable.Conditions.BodyParts));local position=Storage.targets[2].Character[Storage.bodyparts[2]].Position;if (SilentTable.Settings.OffSets.Jump.Enable and (Storage.targets[2].Character:FindFirstChildOfClass("Humanoid"):GetState()==Enum.HumanoidStateType.Freefall)) then position=position + SilentTable.Settings.OffSets.Jump[1] ;end Storage.CFposition=position + ((SilentTable.Settings.Prediction and (Velocity(Storage.targets[2],SilentTable.Settings.Resolver) * GetPrediction())) or 0) ;end end end function UpdateCamlock() local CamLockTable=getgenv().NemesisPreBeta.Camlock;if (Storage.etc.Ctoggled and CamLockTable.Toggling.Enable and (Storage.targets[1]~=nil) and (Storage.targets[1].Character~=nil)) then local position=Storage.targets[1].Character[Storage.bodyparts[1]].Position;if (CamLockTable.Settings.OffSets.Jump.Enable and (Storage.targets[1].Character:FindFirstChildOfClass("Humanoid"):GetState()==Enum.HumanoidStateType.Freefall)) then position=position + CamLockTable.Settings.OffSets.Jump[1] ;end if CamLockTable.Settings.Smoothing.enable then local goal=CFrame.new(Camera.CFrame.Position,position + ((CamLockTable.Settings.Prediction[1] * GetPrediction()) or Vector3.new()) );Camera.CFrame=Camera.CFrame:Lerp(goal,CamLockTable.Settings.Smoothing.x,CamLockTable.Settings.Smoothing.y);else local prediction=(CamLockTable.Settings.Prediction[1] and (Storage.targets[1].Character.HumanoidRootPart.AssemblyLinearVelocity * GetPrediction())) or Vector3.new() ;Camera.CFrame=CFrame.new(Camera.CFrame.Position,position + prediction );end end end do NewConnection(UserInput.InputBegan,function(key,wtv) if ((key.KeyCode==Enum.KeyCode[getgenv().NemesisPreBeta.Camlock.Toggling.Keybind:upper()]) and  not wtv) then if getgenv().NemesisPreBeta.Camlock.Toggling.Enable then Storage.etc.Ctoggled= not Storage.etc.Ctoggled;Storage.targets[1]=GetClosest(getgenv().NemesisPreBeta.Camlock.Conditions.Player);if (Storage.targets[1] and Storage.targets[1].Character) then Storage.bodyparts[1]=tostring(Closespart(Storage.targets[1],getgenv().NemesisPreBeta.Camlock.Conditions.BodyParts));end elseif (Storage.targets[1]~=nil) then Storage.targets[1]=nil;end end end);NewConnection(UserInput.InputBegan,function(key,wtv) if (getgenv().NemesisPreBeta.Settings.Disabling.Toggle and (key.KeyCode==Enum.KeyCode[getgenv().NemesisPreBeta.Settings.Disabling.Keybind:upper()]) and  not wtv) then for i,v in pairs(Storage.Connections) do if v then v:Disconnect();end end for i,v in pairs(Storage.Drawings) do if (v and v.__OBJECT_EXISTS) then print("f");end end end end);NewConnection(UserInput.InputBegan,function(key,wtv) if (getgenv().NemesisPreBeta.Miscs.Sorting.Toggled and (key.KeyCode==Enum.KeyCode[getgenv().NemesisPreBeta.Miscs.Sorting.Key:upper()]) and  not wtv) then local items={};if getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable then for _,customName in ipairs(getgenv().NemesisPreBeta.Miscs.Sorting.Custom.List) do for _,item in pairs(backpack:GetChildren()) do if (item:IsA("Tool") and (item.Name==customName)) then table.insert(items,1,item);break;end end end end for _,item in pairs(backpack:GetChildren()) do if (item:IsA("Tool") and ( not getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable or  not isInCustomList(item.Name))) then table.insert(items,item);end end if (getgenv().NemesisPreBeta.Miscs.Sorting.alphabetically and  not getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable) then table.sort(items,function(a,b) return a.Name<b.Name ;end);end if (getgenv().NemesisPreBeta.Miscs.Sorting.Ammo and  not getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable) then table.sort(items,function(a,b) return a.Value>b.Value ;end);end for _,item in ipairs(items) do item.Parent=nil;wait(0.01);item.Parent=backpack;end end end);NewConnection(UserInput.InputBegan,function(key,wtv) if (getgenv().NemesisPreBeta.Miscs.Animation.Enable and  not wtv) then for animationName,animationData in pairs(getgenv().NemesisPreBeta.Miscs.Animation.Animations) do if (animationData[1] and (key.KeyCode==Enum.KeyCode[animationData[2]])) then playAnimation(animationName);break;end end end end);NewConnection(Rservice.Heartbeat,function() Thread(UpdateCamlock());Thread(UpdateSilent());end);end for connection,index in next,getconnections(workspace.CurrentCamera.Changed) do index:Disable();end for connection,index in next,getconnections(workspace.CurrentCamera:GetPropertyChangedSignal("CFrame")) do index:Disable();end local oldIndex;oldIndex=hookmetamethod(game,"__index",function(t,k) if ((t:IsA("Mouse") and (k=="Hit")) or (k=="Target")) then if (getgenv().NemesisPreBeta.Silent.Toggling.Enable and Chance(getgenv().NemesisPreBeta.Silent.Settings.HitChance,100) and (Storage.targets[2]~=nil)) then local Hit=CFrame.new(Storage.CFposition);return (k=="Hit") and Hit ;end end return oldIndex(t,k);end);end);Section:NewButton("car spawn","what else do u think it dose",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(201.58902, -14.2499981,1146.7804,0.738204956, -3.3717452e-8,0.674576461,2.597393e-8,1,2.1559254e-8, -0.674576461,1.6062537e-9,0.738204956);end);Section:NewButton("tech store","lmao",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(290.079803,20.3304405,1455.75598, -0.544604003,1.0210813e-7, -0.838693321,5.6796157e-8,1,8.486621e-8,0.838693321, -1.4160817e-9, -0.544604003);end);Section:NewButton("city bank","lmao",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(472.11026, -2.39653563,1402.23743, -0.988262355,2.8701216e-8,0.152766109,3.0222633e-8,1,7.637011e-9, -0.152766109,1.2164365e-8, -0.988262355);end);Section:NewButton("county bank","lmao",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(483.279877,30.7253857, -1451.85815,0.995926738, -7.149821e-10,0.0901659057,6.9178685e-10,1,2.8850172e-10, -0.0901659057, -2.24951e-10,0.995926738);end);Section:NewButton("hideout (safe)","lmao",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(1127.98962, -148.444839, -1306.89685,0.620750189,5.339574e-8,0.784008443, -1.1354285e-8,1, -5.911616e-8, -0.784008443,2.7794512e-8,0.620750189);end);Section:NewButton("county cliffside","this is for van man",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(1492.5249,20.3906193, -725.840759, -0.996977627, -2.8713098e-8,0.0776893795, -2.9173064e-8,1, -4.7856363e-9, -0.0776893795, -7.0376096e-9, -0.996977627);end);Section:NewButton("apartment beach","this is for van man",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(1388.1333, -15.0000029,1834.22852,0.232151374, -5.0245085e-8, -0.972679675,7.446052e-8,1, -3.3884714e-8,0.972679675, -6.455985e-8,0.232151374);end);Section:NewButton("warehouse","this is for van man",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new( -616.810242, -14.7599993,1321.95813, -0.0408079587,6.4881135e-8,0.999167025,4.6092715e-8,1, -6.305271e-8, -0.999167025,4.3481265e-8, -0.0408079587);end);Section:NewButton("mall","this is for van man",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new(287.485718,9.72647667,571.742249, -0.996805906,4.3914866e-8,0.0798620731,3.9600916e-8,1, -5.5601376e-8, -0.0798620731, -5.2261168e-8, -0.996805906);end);Section:NewButton("gun store","this is for van man",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new( -940.471741, -14.2500029,1649.10339, -0.0997125655,7.609382e-8,0.995016277, -2.493366e-8,1, -7.89736e-8, -0.995016277, -3.2684056e-8, -0.0997125655);end);Section:NewButton("docks","this is for van man",function() game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame=CFrame.new( -1624.87769, -31.8751335,1239.16907, -0.998721004,8.591285e-8, -0.0505598597,8.34982e-8,1,4.987057e-8,0.0505598597,4.5585132e-8, -0.998721004);end);local Tab=Window:NewTab("MISC");local Section=Tab:NewSection("Cool Stuff");Section:NewButton("fly keybind is f","lmao",function() local Players=game:GetService("Players");local UserInputService=game:GetService("UserInputService");local RunService=game:GetService("RunService");local Maid=loadstring(game:HttpGet("https://raw.githubusercontent.com/Quenty/NevermoreEngine/main/src/maid/src/Shared/Maid.lua"))();shared.Maid=shared.Maid or Maid.new() ;local Maid=shared.Maid;Maid:DoCleaning();shared.Active=true;local Ignore=false;local Offset=4;local Camera=workspace.CurrentCamera;local LocalPlayer=Players.LocalPlayer or Players.PlayerAdded:Wait() ;local Character=LocalPlayer.Character or LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() ;local CurrentPoint=Character:GetPivot();local task=table.clone(task);local OldDelay=task.delay;task.delay=function(Time,Function) local Enabled=true;OldDelay(Time,function() if Enabled then Function();end end);return {Cancel=function() Enabled=false;end,Activate=function() Enabled=false;Function();end};end;local wait=task.wait;local function StopVelocity() local HumanoidRootPart=Character and Character:FindFirstChild("HumanoidRootPart") ;if  not HumanoidRootPart then return;end HumanoidRootPart.Velocity=Vector3.zero;end Maid:GiveTask(LocalPlayer.CharacterAdded:Connect(function(NewCharacter) Character=NewCharacter;end));Maid:GiveTask(RunService.Stepped:Connect(function() if shared.Active then StopVelocity();local CameraCFrame=Camera.CFrame;CurrentPoint=CFrame.new(CurrentPoint.Position,CurrentPoint.Position + CameraCFrame.LookVector );Character:PivotTo(CurrentPoint);end end));local CurrentTask=nil;local KeyBindStarted={[Enum.KeyCode.Q]={FLY_UP=function() while UserInputService:IsKeyDown(Enum.KeyCode.Q) do RunService.Stepped:Wait();if Ignore then continue;end CurrentPoint=CurrentPoint * CFrame.new(0,Offset,0) ;end end},[Enum.KeyCode.E]={FLY_DOWN=function() while UserInputService:IsKeyDown(Enum.KeyCode.E) do RunService.Stepped:Wait();if Ignore then continue;end CurrentPoint=CurrentPoint * CFrame.new(0, -Offset,0) ;end end},[Enum.KeyCode.W]={FLY_FORWARD=function() while UserInputService:IsKeyDown(Enum.KeyCode.W) do RunService.Stepped:Wait();if Ignore then continue;end CurrentPoint=CurrentPoint * CFrame.new(0,0, -Offset) ;end end},[Enum.KeyCode.S]={FLY_BACK=function() while UserInputService:IsKeyDown(Enum.KeyCode.S) do RunService.Stepped:Wait();if Ignore then continue;end CurrentPoint=CurrentPoint * CFrame.new(0,0,Offset) ;end end},[Enum.KeyCode.A]={FLY_LEFT=function() while UserInputService:IsKeyDown(Enum.KeyCode.A) do RunService.Stepped:Wait();if Ignore then continue;end CurrentPoint=CurrentPoint * CFrame.new( -Offset,0,0) ;end end},[Enum.KeyCode.D]={FLY_RIGHT=function() while UserInputService:IsKeyDown(Enum.KeyCode.D) do RunService.Stepped:Wait();if Ignore then continue;end CurrentPoint=CurrentPoint * CFrame.new(Offset,0,0) ;end end},[Enum.KeyCode.Space]={IGNORE_ON=function() Ignore=true;end},[Enum.KeyCode.F]={TOGGLE=function() local Humanoid=Character:FindFirstChild("Humanoid");if  not Humanoid then return;end local HumanoidRootPart=Character:FindFirstChild("HumanoidRootPart");if  not HumanoidRootPart then return;end if  not shared.Active then CurrentPoint=Character:GetPivot();else if CurrentTask then CurrentTask:Activate();end StopVelocity();Character:PivotTo(CFrame.new(Character:GetPivot().Position));local RunServiceSignal=RunService.Stepped:Connect(function() local AssemblyAngularVelocity=HumanoidRootPart.AssemblyAngularVelocity;if ((AssemblyAngularVelocity.X>20) or (AssemblyAngularVelocity.Y>20) or (AssemblyAngularVelocity.Z>20)) then Character:PivotTo(CFrame.new(Character:GetPivot().Position));end end);CurrentTask=task.delay(10,function() RunServiceSignal:Disconnect();end);Maid:GiveTask(RunServiceSignal);end shared.Active= not shared.Active;end}};local KeyBindEnded={[Enum.KeyCode.Space]={IGNORE_OFF=function() Ignore=false;end}};Maid:GiveTask(UserInputService.InputBegan:Connect(function(Input,GameProcessedEvent) if  not GameProcessedEvent then if ((Input.UserInputType==Enum.UserInputType.Keyboard) and KeyBindStarted[Input.KeyCode]) then for _,Function in pairs(KeyBindStarted[Input.KeyCode]) do task.spawn(Function);end elseif KeyBindStarted[Input.UserInputType] then for _,Function in pairs(KeyBindStarted[Input.UserInputType]) do task.spawn(Function);end end end end));Maid:GiveTask(UserInputService.InputEnded:Connect(function(Input,GameProcessedEvent) if  not GameProcessedEvent then if ((Input.UserInputType==Enum.UserInputType.Keyboard) and KeyBindEnded[Input.KeyCode]) then for _,Function in pairs(KeyBindEnded[Input.KeyCode]) do task.spawn(Function);end elseif KeyBindEnded[Input.UserInputType] then for _,Function in pairs(KeyBindEnded[Input.UserInputType]) do task.spawn(Function);end end end end));end); end
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+ 
+local Window = Library.CreateLib("Shibu.xyz", "DarkTheme")
+local Tab = Window:NewTab("main")
+ 
+local Section = Tab:NewSection("ESP (Mickey made this)")
+
+Section:NewButton("Normal Player esp", "keybind is -", function()
+    local lplr = game.Players.LocalPlayer
+    local camera = game:GetService("Workspace").CurrentCamera
+    local UserInputService = game:GetService("UserInputService")
+    local RunService = game:GetService("RunService")
+
+    local espActive = false  -- Variable to track if ESP is active
+
+    -- Create drawing objects for ESP
+    local Box = Drawing.new("Square")
+    Box.Visible = false
+    Box.Color = Color3.fromRGB(255, 0, 0) -- Default color for box (Red)
+    Box.Thickness = 3
+    Box.Transparency = 1
+    Box.Filled = false
+
+    local HealthBar = Drawing.new("Line")
+    HealthBar.Visible = false
+    HealthBar.Color = Color3.new(0, 1, 0)
+    HealthBar.Thickness = 2
+
+    local NameTag = Drawing.new("Text")
+    NameTag.Visible = false
+    NameTag.Color = Color3.new(1, 1, 1)
+    NameTag.Size = 9
+    NameTag.Center = true
+    NameTag.Outline = true
+    NameTag.OutlineColor = Color3.new(0, 0, 0)
+
+    local Tracer = Drawing.new("Line")
+    Tracer.Visible = false
+    Tracer.Color = Color3.fromRGB(255, 0, 0)  -- Default tracer color (Red)
+    Tracer.Thickness = 2
+
+    -- Function to apply chams effect (outline color)
+    local function applyChams(character)
+        if character:FindFirstChild("HumanoidRootPart") then
+            -- Creating a material change effect on the character for Chams (colored outline)
+            for _, part in pairs(character:GetChildren()) do
+                if part:IsA("MeshPart") or part:IsA("Part") then
+                    part.Material = Enum.Material.SmoothPlastic
+                    part.Color = character:FindFirstChild("TeamColor") and character.TeamColor.Color or Color3.fromRGB(255, 0, 0)  -- Default team color fallback
+                end
+            end
+        end
+    end
+
+    -- Function to update and display ESP for a given player
+    local function updateEsp(v)
+        if v.Character and v.Character:FindFirstChild("Humanoid") and v.Character:FindFirstChild("HumanoidRootPart") and v ~= lplr and v.Character.Humanoid.Health > 0 then
+            local RootPart = v.Character.HumanoidRootPart
+            local Head = v.Character.Head
+            local RootPosition, onScreen = camera:worldToViewportPoint(RootPart.Position)
+            local HeadPosition = camera:worldToViewportPoint(Head.Position)
+            local LegPosition = camera:worldToViewportPoint(RootPart.Position - Vector3.new(0, 3, 0))
+
+            -- Box ESP
+            Box.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
+            Box.Position = Vector2.new(RootPosition.X - Box.Size.X / 2, RootPosition.Y - Box.Size.Y / 2)
+
+            -- Health bar ESP
+            local health = v.Character.Humanoid.Health / v.Character.Humanoid.MaxHealth
+            HealthBar.From = Vector2.new(Box.Position.X + Box.Size.X + 5, Box.Position.Y + Box.Size.Y * (1 - health))
+            HealthBar.To = Vector2.new(Box.Position.X + Box.Size.X + 5, Box.Position.Y + Box.Size.Y)
+            HealthBar.Color = Color3.new(1 - health, health, 0)
+
+            -- Name tag ESP
+            NameTag.Position = Vector2.new(Box.Position.X + Box.Size.X / 2, Box.Position.Y - 20)
+            NameTag.Text = v.Name
+
+            -- Tracer ESP
+            local lplrHead = lplr.Character:FindFirstChild("Head")
+            if lplrHead then
+                local lplrHeadViewport = camera:worldToViewportPoint(lplrHead.Position)
+                Tracer.From = Vector2.new(lplrHeadViewport.X, lplrHeadViewport.Y)
+                Tracer.To = Vector2.new(RootPosition.X, RootPosition.Y)
+            end
+
+            -- Apply Chams Effect
+            applyChams(v.Character)
+
+            -- Make ESP visible if the player is on screen
+            if onScreen then
+                Box.Visible = true
+                HealthBar.Visible = true
+                NameTag.Visible = true
+                Tracer.Visible = true
+            else
+                Box.Visible = false
+                HealthBar.Visible = false
+                NameTag.Visible = false
+                Tracer.Visible = false
+            end
+        else
+            -- Hide ESP if player is not valid
+            Box.Visible = false
+            HealthBar.Visible = false
+            NameTag.Visible = false
+            Tracer.Visible = false
+        end
+    end
+
+    -- Loop through all players and create ESP
+    for _, v in pairs(game.Players:GetChildren()) do
+        updateEsp(v)
+    end
+
+    game.Players.PlayerAdded:Connect(function(v)
+        updateEsp(v)
+    end)
+
+    -- Keybind to toggle the ESP on and off when the "-" key is pressed
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        if input.KeyCode == Enum.KeyCode.Minus then  -- "-" key is mapped to "Minus" key in Roblox
+            espActive = not espActive  -- Toggle the ESP active state
+
+            -- If ESP is deactivated, hide all ESP elements
+            if not espActive then
+                Box.Visible = false
+                HealthBar.Visible = false
+                NameTag.Visible = false
+                Tracer.Visible = false
+            end
+        end
+    end)
+
+    -- Function to continuously update ESP for active players
+    RunService.RenderStepped:Connect(function()
+        if espActive then
+            for _, player in pairs(game.Players:GetChildren()) do
+                updateEsp(player)
+            end
+        end
+    end)
+end)
+
+Section:NewButton("Mod Esp", "keybind is +", function()
+    local Players = game:GetService("Players")
+    local UserInputService = game:GetService("UserInputService")
+
+    -- List of UserIds for players who should have "MOD" above their head
+    local modUserIds = {
+        211408817,  -- Example UserId 1
+        304478876,  -- Example UserId 2
+        3233673077,  -- Example UserId 3
+        275890432,  -- Example UserId 4
+        4704223349,  -- Example UserId 5
+        633752460,  -- Example UserId 6
+        177822416,  -- Example UserId 7
+        466131196,  -- Example UserId 8
+        454578312,  -- Example UserId 9
+    }
+
+    -- Function to check if the player is in the mod UserId list
+    local function isPlayerMod(player)
+        for _, userId in pairs(modUserIds) do
+            if player.UserId == userId then
+                return true
+            end
+        end
+        return false
+    end
+
+    -- Function to show "MOD" above the player's head
+    local function showModAboveHead(player)
+        -- If the player is in the mod UserId list
+        if isPlayerMod(player) then
+            -- Create the "MOD" text label above their head
+            local head = player.Character and player.Character:FindFirstChild("Head")
+            if head then
+                local modLabel = Instance.new("BillboardGui")
+                modLabel.Parent = head
+                modLabel.Adornee = head
+                modLabel.Size = UDim2.new(0, 100, 0, 50)
+                modLabel.StudsOffset = Vector3.new(0, 3, 0) -- Adjust vertical position
+
+                local textLabel = Instance.new("TextLabel")
+                textLabel.Parent = modLabel
+                textLabel.Text = "MOD"
+                textLabel.TextSize = 20
+                textLabel.TextColor3 = Color3.fromRGB(255, 0, 0) -- Red text for "MOD"
+                textLabel.BackgroundTransparency = 1
+                textLabel.Size = UDim2.new(1, 0, 1, 0)
+                textLabel.TextAlign = Enum.TextAlign.Center
+            end
+        end
+    end
+
+    -- Keybind for "+" (Plus Key)
+    UserInputService.InputBegan:Connect(function(input, gameProcessed)
+        if gameProcessed then return end
+        if input.KeyCode == Enum.KeyCode.Equals then  -- "+" key is mapped to "Equals" key in Roblox
+            -- Loop through all players and check if they are in the mod UserId list
+            for _, player in pairs(Players:GetPlayers()) do
+                showModAboveHead(player)
+            end
+        end
+    end)
+end)
+
+local Section = Tab:NewSection("Fun Stuff (Mickey made this)")
+
+Section:NewButton("camlock", "keybind is t", function()
+    getgenv().NemesisPreBeta = {
+        ["Settings"] = {
+            Disabling = {Toggle = false, Keybind = "H"},
+            UpdateTickDelay = 0.05
+        },
+        ["Camlock"] = {
+            Toggling = {
+                Enable = true, 
+                Keybind = "T"
+            },
+            Settings = {
+                Prediction = { 
+                    true, 
+                    999.999, 
+                    false, 
+                    .003
+                },
+                Smoothing = {
+                    smoothness = false, 
+                    x = 0, 
+                    y = 0
+                },
+                OffSets = {
+                    Jump = {
+                        Enable = false, 
+                        [1] = Vector3.new(0, 1, 0)
+                    }
+                }
+            },
+            Conditions = {
+                Player = {
+                    WallCheck = false, 
+                    Grabbed = false, 
+                    Knocked = false, 
+                    CrewID = false
+                },
+                BodyParts = {"Head"}
+            }
+        },
+        ["Silent"] = {
+            Toggling = { Enable = false },
+            Settings = {
+                Prediction = { true , 0.11934 , false, 0.003 },
+                HitChance = 100,
+                Resolver = true,
+                OffSets = {
+                    Jump = {
+                        Enable = false, 
+                        [1] = Vector3.new(0, 0, 0)
+                    }
+                }
+            },
+            Conditions = {
+                Player = { WallCheck = false, Grabbed = false, Knocked = false, CrewID = false },
+                BodyParts = {"Head"}
+            }
+        },
+        ["Field Of View"] = {
+            Enable = true, 
+            Size = 1000, 
+            Color = Color3.fromRGB(255, 255, 255), 
+        },
+        ["Miscs"] = {
+            ["Sorting"] = {
+                Toggled = false,
+                Key = "F",
+                alphabetically = true,
+                Ammo = false,
+                Custom = {
+                    Enable = false,
+                    List = {[1] = "[Revolver]", [2] = "[Chicken]"} -- // etc
+                }
+            },
+            ["Animation"] = {
+                Enable = true,
+                Animations = {["Greet"] = {[1] = false, [2] = "V"}}
+            }
+        }
+    }
+ 
+ 
+ 
+ 
+ 
+    local DUpvalue, Round, V3, V2, CF, Rservice, UserInput, Ping, Mouse, backpack  = debug.getupvalue, math.round, Vector3.new, Vector2.new, CFrame.new, game:GetService("RunService"), game:GetService("UserInputService"), game:GetService("Stats").PerformanceStats.Ping, game:GetService("Players").LocalPlayer:GetMouse(), game:GetService("Players").LocalPlayer.Backpack
+    local Players, Self, Character, Camera = game:GetService("Players"), game:GetService("Players").LocalPlayer, game:GetService("Players").LocalPlayer.Character or  game:GetService("Players").LocalPlayer.CharacterAdded:Wait(), game:GetService("Workspace").CurrentCamera
+    local idx, endp
+ 
+ 
+    local Storage = {
+        Drawings = {},
+        Connections = {},
+        targets = {
+            [1] = nil,
+            [2] = nil
+        },
+        ValuePosition = nil,
+        bodyparts = {
+            [1] = "",
+            [2] = ""
+        },
+        update_tick = tick(),
+        etc = {
+            Ctoggled = false,
+            Mtoggled = false
+        },
+        items = {}
+    }
+ 
+ 
+ 
+    function NewConnection(type, callback)
+        local connection = type:Connect(callback)
+        Storage.Connections[#Storage.Connections+1] = connection
+        return connection
+    end
+ 
+    function Chance(chance, maxchance)
+        return math.random(maxchance) <= chance
+    end
+ 
+ 
+    function Thread(Function, ...)
+        local co
+        local success, result
+ 
+        if Function ~= nil then
+            co = coroutine.create(Function)
+            success, result = coroutine.resume(co, ...)
+        end
+        if success ~= nil and co ~= nil and Function ~= nil then
+            return result
+        end
+    end
+ 
+ 
+    function wallcheck(origin)
+        local parts = Camera:GetPartsObscuringTarget({origin.Position,  Character.HumanoidRootPart.Position}, {Camera, Character, origin.Parent})
+        if #parts == 0 then
+            return true
+        end
+        return false
+    end
+ 
+    function Grabbed(player)
+        if player.Character ~= nil  then
+            return not player.Character:FindFirstChild("GRABBING_CONSTRAINT")
+        end
+    end
+ 
+    function Knocked(player)
+        if player.Character ~= nil  then
+            return player.Character.BodyEffects["K.O"].Value ~= true
+        end
+    end
+ 
+ 
+    local pingHistory = {}
+    local lastPingUpdateTime = tick()
+ 
+ 
+ 
+    function GetPrediction()
+        local currentPing = Ping:GetValue() * 0.003
+        if getgenv().NemesisPreBeta.Camlock.Settings.Prediction[3] or getgenv().NemesisPreBeta.Silent.Settings.Prediction[3] then
+            return currentPing
+        else
+            return getgenv().NemesisPreBeta.Camlock.Settings.Prediction[2] and getgenv().NemesisPreBeta.Silent.Settings.Prediction[2]
+        end
+    end
+ 
+    function Crew(player)
+        if game.Players.LocalPlayer:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew") then
+            local SelfCrewValue =  game.Players.LocalPlayer:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew")
+            if SelfCrewValue.Value ~= 0 then
+                if player:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew")  then
+                    local Enimy = player:FindFirstChild("DataFolder"):FindFirstChild("Information"):FindFirstChild("Crew")
+                    if Enimy.Value == SelfCrewValue.Value then
+                        return false
+                    end
+                end
+            end
+        end
+        return true
+    end
+ 
+ 
+ 
+    function Closespart(player, hitboxes)
+        local closestPart
+        local closestDistanc = math.huge
+        for _, hitbox in pairs(hitboxes) do
+            local part = player.Character:FindFirstChild(hitbox)
+            if part then
+                local pos = Camera:WorldToViewportPoint(part.Position)
+                local distance = (UserInput:GetMouseLocation() - V2(pos.X, pos.Y)).Magnitude
+                if distance < closestDistanc then
+                    closestPart = part
+                    closestDistanc = distance
+                end
+            end
+        end
+        return closestPart
+    end
+ 
+ 
+ 
+    function isInCustomList(toolName)
+        for _, customName in ipairs(getgenv().NemesisPreBeta.Miscs.Sorting.Custom.List) do
+            if toolName == customName then
+                return true
+            end
+        end
+        return false
+    end
+ 
+ 
+    function GetClosest(table)
+        local MaxDistance = getgenv().NemesisPreBeta["Field Of View"].Enable and getgenv().NemesisPreBeta["Field Of View"].Size or math.huge
+        local Target
+ 
+        for i,v in pairs(Players:GetPlayers()) do
+            if v ~= Self and v.Character ~= nil and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Head") then
+                local ViewPort, Visible = Camera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                local Mag = (UserInput:GetMouseLocation() - Vector2.new(ViewPort.X, ViewPort.Y)).Magnitude
+                if MaxDistance > Mag and Visible and (
+                    (table.WallCheck and wallcheck(v.Character.HumanoidRootPart)) or true and
+                    (table.Grabbed and Grabbed(v)) or true and
+                    (table.Knocked and Knocked(v)) or true and
+                    (table.CrewID and Crew(v)) or true 
+                ) then
+                    MaxDistance = Mag
+                    Target = v
+                end
+            end
+        end
+        return Target
+    end
+ 
+    function Velocity(Target, method)
+        if method == true then
+            local pos = Target.Character.HumanoidRootPart.Position
+            local lastTime = tick()
+            local currentPos, currentTime
+            local connection
+            connection =
+                game:GetService("RunService").Heartbeat:Connect(
+                function()
+                    currentPos = Target.Character.HumanoidRootPart.Position
+                    currentTime = tick()
+                    connection:Disconnect()
+                end
+            )
+            wait(0.01)
+            local velocity = (currentPos - pos) / (currentTime - lastTime)
+            return Vector3.new(math.floor(velocity.X), math.floor(velocity.Y), math.floor(velocity.Z))
+        else
+            return Target.character:FindFirstChild("HumanoidRootPart").AssemblyLinearVelocity
+        end
+    end
+ 
+    function playAnimation(animationName)
+        local args = {
+            [1] = "AnimationPack",
+            [2] = animationName,
+        }
+        game:GetService("ReplicatedStorage").MainEvent:FireServer(unpack(args))
+    end
+ 
+ 
+    -- // updates
+ 
+    function UpdateSilent()
+        local SilentTable = getgenv().NemesisPreBeta.Silent
+        if SilentTable.Toggling.Enable then
+            Storage.targets[2] = GetClosest(SilentTable.Conditions.Player)
+            if Storage.targets[2] ~= nil and Storage.targets[2].Character ~= nil and Storage.targets[2].Character:FindFirstChild("HumanoidRootPart") then
+                Storage.bodyparts[2] =  tostring(Closespart(Storage.targets[2], SilentTable.Conditions.BodyParts))
+                local position = Storage.targets[2].Character[Storage.bodyparts[2]].Position
+                if SilentTable.Settings.OffSets.Jump.Enable and Storage.targets[2].Character:FindFirstChildOfClass("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall then
+                    position = position + SilentTable.Settings.OffSets.Jump[1]
+                end
+                Storage.CFposition = position + (SilentTable.Settings.Prediction and Velocity(Storage.targets[2], SilentTable.Settings.Resolver) * GetPrediction() or 0)
+            end
+        end
+    end
+ 
+ 
+    function UpdateCamlock()
+        local CamLockTable = getgenv().NemesisPreBeta.Camlock
+        if Storage.etc.Ctoggled and CamLockTable.Toggling.Enable and Storage.targets[1] ~= nil and Storage.targets[1].Character ~= nil then
+            local position = Storage.targets[1].Character[Storage.bodyparts[1]].Position
+ 
+            if CamLockTable.Settings.OffSets.Jump.Enable and Storage.targets[1].Character:FindFirstChildOfClass("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall then
+                position = position + CamLockTable.Settings.OffSets.Jump[1]
+            end
+ 
+            if CamLockTable.Settings.Smoothing.enable then
+                local goal = CFrame.new(Camera.CFrame.Position, position + (CamLockTable.Settings.Prediction[1] * GetPrediction() or Vector3.new()))
+                Camera.CFrame = Camera.CFrame:Lerp(goal, CamLockTable.Settings.Smoothing.x, CamLockTable.Settings.Smoothing.y)
+            else
+                local prediction = CamLockTable.Settings.Prediction[1] and Storage.targets[1].Character.HumanoidRootPart.AssemblyLinearVelocity * GetPrediction() or Vector3.new()
+                Camera.CFrame = CFrame.new(Camera.CFrame.Position, position + prediction)
+            end
+        end
+    end
+ 
+    do -- main connection
+ 
+        NewConnection(UserInput.InputBegan, function(key, wtv)
+            if key.KeyCode == Enum.KeyCode[getgenv().NemesisPreBeta.Camlock.Toggling.Keybind:upper()] and not wtv then
+                if getgenv().NemesisPreBeta.Camlock.Toggling.Enable then
+                    Storage.etc.Ctoggled = not Storage.etc.Ctoggled
+                    Storage.targets[1] = GetClosest(getgenv().NemesisPreBeta.Camlock.Conditions.Player)
+ 
+                    if  Storage.targets[1] and  Storage.targets[1].Character then
+                        Storage.bodyparts[1] = tostring(Closespart(Storage.targets[1], getgenv().NemesisPreBeta.Camlock.Conditions.BodyParts))
+ 
+                    end
+                else
+                    if  Storage.targets[1] ~= nil then
+                        Storage.targets[1] = nil
+                    end
+                end
+            end
+        end)
+ 
+        NewConnection(UserInput.InputBegan, function(key, wtv)
+            if getgenv().NemesisPreBeta.Settings.Disabling.Toggle and key.KeyCode == Enum.KeyCode[getgenv().NemesisPreBeta.Settings.Disabling.Keybind:upper()]  and not wtv then
+                for i,v in pairs(Storage.Connections) do
+                    if v then
+                        v:Disconnect()
+                    end
+                end
+                for i,v in pairs(Storage.Drawings) do
+                    if v and v.__OBJECT_EXISTS then
+                        print("f")
+                    end
+                end
+            end
+        end)
+ 
+        NewConnection(UserInput.InputBegan, function(key, wtv)
+            if getgenv().NemesisPreBeta.Miscs.Sorting.Toggled and key.KeyCode == Enum.KeyCode[getgenv().NemesisPreBeta.Miscs.Sorting.Key:upper()] and not wtv then
+                local items = {}
+ 
+                if getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable then
+                    for _, customName in ipairs(getgenv().NemesisPreBeta.Miscs.Sorting.Custom.List) do
+                        for _, item in pairs(backpack:GetChildren()) do
+                            if item:IsA("Tool") and item.Name == customName then
+                                table.insert(items, 1, item)
+                                break
+                            end
+                        end
+                    end
+                end
+ 
+                for _, item in pairs(backpack:GetChildren()) do
+                    if item:IsA("Tool") and (not getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable or not isInCustomList(item.Name)) then
+                        table.insert(items, item)
+                    end
+                end
+ 
+                if getgenv().NemesisPreBeta.Miscs.Sorting.alphabetically and not getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable then
+                    table.sort(items, function(a, b)
+                        return a.Name < b.Name
+                    end)
+                end
+ 
+                if getgenv().NemesisPreBeta.Miscs.Sorting.Ammo and not getgenv().NemesisPreBeta.Miscs.Sorting.Custom.Enable then
+                    table.sort(items, function(a, b)
+                        return a.Value > b.Value
+                    end)
+                end
+ 
+                for _, item in ipairs(items) do
+                    item.Parent = nil
+                    wait(0.01)
+                    item.Parent = backpack
+                end
+ 
+            end
+        end)
+ 
+        NewConnection(UserInput.InputBegan, function(key, wtv)
+            if getgenv().NemesisPreBeta.Miscs.Animation.Enable and not wtv then
+                for animationName, animationData in pairs(getgenv().NemesisPreBeta.Miscs.Animation.Animations) do
+                    if animationData[1] and key.KeyCode == Enum.KeyCode[animationData[2]] then
+                        playAnimation(animationName)
+                        break
+                    end
+                end
+            end
+        end)
+ 
+ 
+ 
+ 
+        NewConnection(Rservice.Heartbeat, function()
+ 
+                --//  camlock
+                Thread(UpdateCamlock())
+ 
+                --// Silent UPDATE
+                Thread(UpdateSilent())
+ 
+        end)
+    end
+ 
+ 
+        for connection, index in next, getconnections(workspace.CurrentCamera.Changed) do
+            index:Disable()
+        end
+        for connection, index in next, getconnections(workspace.CurrentCamera:GetPropertyChangedSignal("CFrame")) do
+            index:Disable()
+        end
+ 
+ 
+    local oldIndex
+    oldIndex = hookmetamethod(game, "__index", function(t, k)
+        if t:IsA("Mouse") and k == "Hit" or k == "Target" then
+            if  getgenv().NemesisPreBeta.Silent.Toggling.Enable and Chance(getgenv().NemesisPreBeta.Silent.Settings.HitChance, 100) and Storage.targets[2] ~= nil then
+                local Hit = CFrame.new(Storage.CFposition)
+                return (k == "Hit" and Hit)
+            end
+        end
+        return oldIndex(t, k)
+    end)
+end)
+ 
+Section:NewButton("car spawn", "what else do u think it dose", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(201.58902, -14.2499981, 1146.7804, 0.738204956, -3.37174519e-08, 0.674576461, 2.59739306e-08, 1, 2.15592539e-08, -0.674576461, 1.60625369e-09, 0.738204956)
+end)
+ 
+Section:NewButton("tech store", "lmao", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(290.079803, 20.3304405, 1455.75598, -0.544604003, 1.02108132e-07, -0.838693321, 5.67961571e-08, 1, 8.48662083e-08, 0.838693321, -1.4160817e-09, -0.544604003)
+end)
+ 
+Section:NewButton("city bank", "lmao", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(472.11026, -2.39653563, 1402.23743, -0.988262355, 2.87012156e-08, 0.152766109, 3.02226333e-08, 1, 7.63701102e-09, -0.152766109, 1.21643646e-08, -0.988262355)
+end)
+ 
+Section:NewButton("county bank", "lmao", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(483.279877, 30.7253857, -1451.85815, 0.995926738, -7.14982074e-10, 0.0901659057, 6.9178685e-10, 1, 2.88501723e-10, -0.0901659057, -2.24951002e-10, 0.995926738)
+end)
+ 
+Section:NewButton("hideout (safe)", "lmao", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1127.98962, -148.444839, -1306.89685, 0.620750189, 5.33957412e-08, 0.784008443, -1.13542846e-08, 1, -5.91161609e-08, -0.784008443, 2.77945116e-08, 0.620750189)
+end)
+ 
+Section:NewButton("county cliffside", "this is for van man", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1492.5249, 20.3906193, -725.840759, -0.996977627, -2.87130977e-08, 0.0776893795, -2.9173064e-08, 1, -4.78563633e-09, -0.0776893795, -7.03760961e-09, -0.996977627)
+end)
+ 
+Section:NewButton("apartment beach", "this is for van man", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(1388.1333, -15.0000029, 1834.22852, 0.232151374, -5.02450845e-08, -0.972679675, 7.44605231e-08, 1, -3.38847137e-08, 0.972679675, -6.4559849e-08, 0.232151374)
+end)
+ 
+Section:NewButton("warehouse", "this is for van man", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-616.810242, -14.7599993, 1321.95813, -0.0408079587, 6.48811351e-08, 0.999167025, 4.60927154e-08, 1, -6.30527097e-08, -0.999167025, 4.34812648e-08, -0.0408079587)
+end)
+ 
+Section:NewButton("mall", "this is for van man", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(287.485718, 9.72647667, 571.742249, -0.996805906, 4.39148664e-08, 0.0798620731, 3.96009163e-08, 1, -5.56013759e-08, -0.0798620731, -5.22611678e-08, -0.996805906)
+end)
+ 
+Section:NewButton("gun store", "this is for van man", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-940.471741, -14.2500029, 1649.10339, -0.0997125655, 7.60938192e-08, 0.995016277, -2.49336605e-08, 1, -7.89735992e-08, -0.995016277, -3.26840564e-08, -0.0997125655)
+end)
+ 
+Section:NewButton("docks", "this is for van man", function()
+    game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-1624.87769, -31.8751335, 1239.16907, -0.998721004, 8.59128519e-08, -0.0505598597, 8.34982004e-08, 1, 4.98705717e-08, 0.0505598597, 4.55851321e-08, -0.998721004)
+end)
+ 
+local Tab = Window:NewTab("MISC")
+local Section = Tab:NewSection("Cool Stuff")
+ 
+Section:NewButton("fly keybind is f", "lmao", function()
+    local Players = game:GetService("Players");
+    local UserInputService = game:GetService("UserInputService");
+    local RunService = game:GetService("RunService")
+ 
+    local Maid = loadstring(game:HttpGet('https://raw.githubusercontent.com/Quenty/NevermoreEngine/main/src/maid/src/Shared/Maid.lua'))()
+ 
+    shared.Maid = shared.Maid or Maid.new(); local Maid = shared.Maid; Maid:DoCleaning();
+    shared.Active = true;
+ 
+    local Ignore = false
+ 
+    local Offset = 4;
+ 
+    local Camera = workspace.CurrentCamera;
+ 
+    local LocalPlayer = Players.LocalPlayer or Players.PlayerAdded:Wait();
+    local Character = LocalPlayer.Character or LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait();
+ 
+    local CurrentPoint = Character:GetPivot();
+ 
+    local task = table.clone(task);
+ 
+    local OldDelay = task.delay;
+ 
+    function task.delay(Time, Function)
+        local Enabled = true;
+ 
+        OldDelay(Time, function()
+            if Enabled then
+                Function();
+            end
+        end)
+ 
+        return {
+            Cancel = function()
+                Enabled = false;
+            end;
+            Activate = function()
+                Enabled = false
+                Function()
+            end
+        }
+    end
+    local wait = task.wait;
+ 
+    local function StopVelocity()
+        local HumanoidRootPart = Character and Character:FindFirstChild("HumanoidRootPart"); if not HumanoidRootPart then return end;
+ 
+        HumanoidRootPart.Velocity = Vector3.zero;
+    end
+ 
+    Maid:GiveTask(LocalPlayer.CharacterAdded:Connect(function(NewCharacter)
+        Character = NewCharacter
+    end))
+ 
+    Maid:GiveTask(RunService.Stepped:Connect(function()
+        if shared.Active then
+            StopVelocity();
+            local CameraCFrame = Camera.CFrame
+ 
+            CurrentPoint = CFrame.new(CurrentPoint.Position, CurrentPoint.Position + CameraCFrame.LookVector)
+            Character:PivotTo(CurrentPoint);
+        end
+    end))
+ 
+    local CurrentTask = nil;
+ 
+    local KeyBindStarted = {
+        [Enum.KeyCode.Q] = {
+            ["FLY_UP"] = function()
+                while UserInputService:IsKeyDown(Enum.KeyCode.Q) do
+                    RunService.Stepped:Wait()
+                    if Ignore then continue end;
+ 
+                    CurrentPoint = CurrentPoint * CFrame.new(0, Offset, 0)
+                end
+            end;
+        };
+        [Enum.KeyCode.E] = {
+            ["FLY_DOWN"] = function()
+                while UserInputService:IsKeyDown(Enum.KeyCode.E) do
+                    RunService.Stepped:Wait()
+                    if Ignore then continue end;
+ 
+                    CurrentPoint = CurrentPoint * CFrame.new(0, -Offset, 0)
+                end
+            end;
+        };
+        [Enum.KeyCode.W] = {
+            ["FLY_FORWARD"] = function()
+                while UserInputService:IsKeyDown(Enum.KeyCode.W) do
+                    RunService.Stepped:Wait()
+                    if Ignore then continue end;
+ 
+                    CurrentPoint = CurrentPoint * CFrame.new(0, 0, -Offset)
+                end
+            end;
+        };
+        [Enum.KeyCode.S] = {
+            ["FLY_BACK"] = function()
+                while UserInputService:IsKeyDown(Enum.KeyCode.S) do
+                    RunService.Stepped:Wait()
+                    if Ignore then continue end;
+ 
+                    CurrentPoint = CurrentPoint * CFrame.new(0, 0, Offset)
+                end
+            end;
+        };
+        [Enum.KeyCode.A] = {
+            ["FLY_LEFT"] = function()
+                while UserInputService:IsKeyDown(Enum.KeyCode.A) do
+                    RunService.Stepped:Wait()
+                    if Ignore then continue end;
+ 
+                    CurrentPoint = CurrentPoint * CFrame.new(-Offset, 0, 0)
+                end
+            end;
+        };
+        [Enum.KeyCode.D] = {
+            ["FLY_RIGHT"] = function()
+                while UserInputService:IsKeyDown(Enum.KeyCode.D) do
+                    RunService.Stepped:Wait()
+                    if Ignore then continue end;
+ 
+                    CurrentPoint = CurrentPoint * CFrame.new(Offset, 0, 0)
+                end
+            end;
+        };
+        [Enum.KeyCode.Space] = {
+            ["IGNORE_ON"] = function()
+                Ignore = true
+            end;
+        };
+        [Enum.KeyCode.F] = {
+            ["TOGGLE"] = function()
+                local Humanoid = Character:FindFirstChild("Humanoid") if not Humanoid then return end;
+                local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart") if not HumanoidRootPart then return end;
+ 
+                if not shared.Active then
+                    CurrentPoint = Character:GetPivot();
+                else
+                    if CurrentTask then
+                        CurrentTask:Activate()
+                    end
+ 
+                    StopVelocity();
+ 
+                    Character:PivotTo(CFrame.new(Character:GetPivot().Position))
+ 
+                    local RunServiceSignal = RunService.Stepped:Connect(function()
+                        local AssemblyAngularVelocity = HumanoidRootPart.AssemblyAngularVelocity;
+ 
+                        if AssemblyAngularVelocity.X > 20 
+                        or AssemblyAngularVelocity.Y > 20
+                        or AssemblyAngularVelocity.Z > 20  then
+                             Character:PivotTo(CFrame.new(Character:GetPivot().Position))
+                        end
+                    end)
+ 
+                    CurrentTask = task.delay(10, function()
+                        RunServiceSignal:Disconnect()
+                    end)
+ 
+                    Maid:GiveTask(RunServiceSignal)
+                end
+ 
+                shared.Active = not shared.Active
+            end;
+        }
+    }
+ 
+    local KeyBindEnded = {
+        [Enum.KeyCode.Space] = {
+            ["IGNORE_OFF"] = function()
+                Ignore = false
+            end;
+        };
+    }
+ 
+    Maid:GiveTask(UserInputService.InputBegan:Connect(function(Input, GameProcessedEvent)
+        if not GameProcessedEvent then
+            if Input.UserInputType == Enum.UserInputType.Keyboard and KeyBindStarted[Input.KeyCode] then
+                for _, Function in pairs(KeyBindStarted[Input.KeyCode]) do
+                    task.spawn(Function)
+                end
+            elseif KeyBindStarted[Input.UserInputType] then
+                for _, Function in pairs(KeyBindStarted[Input.UserInputType]) do
+                    task.spawn(Function)
+                end
+            end
+        end
+    end))
+ 
+    Maid:GiveTask(UserInputService.InputEnded:Connect(function(Input, GameProcessedEvent)
+        if not GameProcessedEvent then
+            if Input.UserInputType == Enum.UserInputType.Keyboard and KeyBindEnded[Input.KeyCode] then
+                for _, Function in pairs(KeyBindEnded[Input.KeyCode]) do
+                    task.spawn(Function)
+                end
+            elseif KeyBindEnded[Input.UserInputType] then
+                for _, Function in pairs(KeyBindEnded[Input.UserInputType]) do
+                    task.spawn(Function)
+                end
+            end
+        end
+    end))
+ 
+ 
+end)
+
+Section:NewButton("Freecam is Shift + P", "enjoy spying", function()
+    --Converted with ttyyuu12345's model to script plugin v4
+function sandbox(var,func)
+    local env = getfenv(func)
+    local newenv = setmetatable({},{
+    __index = function(self,k)
+    if k=="script" then
+    return var
+    else
+    return env[k]
+    end
+    end,
+    })
+    setfenv(func,newenv)
+    return func
+    end
+    cors = {}
+    mas = Instance.new("Model",game:GetService("Lighting"))
+    LocalScript0 = Instance.new("LocalScript")
+    LocalScript0.Name = "FreeCamera"
+    LocalScript0.Parent = mas
+    table.insert(cors,sandbox(LocalScript0,function()
+    -----------------------------------------------------------------------
+    -- Freecam
+    -- Cinematic free camera for spectating and video production.
+    ------------------------------------------------------------------------
+     
+    local pi    = math.pi
+    local abs   = math.abs
+    local clamp = math.clamp
+    local exp   = math.exp
+    local rad   = math.rad
+    local sign  = math.sign
+    local sqrt  = math.sqrt
+    local tan   = math.tan
+     
+    local ContextActionService = game:GetService("ContextActionService")
+    local Players = game:GetService("Players")
+    local RunService = game:GetService("RunService")
+    local StarterGui = game:GetService("StarterGui")
+    local UserInputService = game:GetService("UserInputService")
+     
+    local LocalPlayer = Players.LocalPlayer
+    if not LocalPlayer then
+    Players:GetPropertyChangedSignal("LocalPlayer"):Wait()
+    LocalPlayer = Players.LocalPlayer
+    end
+     
+    local Camera = workspace.CurrentCamera
+    workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+    local newCamera = workspace.CurrentCamera
+    if newCamera then
+    Camera = newCamera
+    end
+    end)
+     
+    ------------------------------------------------------------------------
+     
+    local TOGGLE_INPUT_PRIORITY = Enum.ContextActionPriority.Low.Value
+    local INPUT_PRIORITY = Enum.ContextActionPriority.High.Value
+    local FREECAM_MACRO_KB = {Enum.KeyCode.LeftShift, Enum.KeyCode.P}
+     
+    local NAV_GAIN = Vector3.new(1, 1, 1)*64
+    local PAN_GAIN = Vector2.new(0.75, 1)*8
+    local FOV_GAIN = 300
+     
+    local PITCH_LIMIT = rad(90)
+     
+    local VEL_STIFFNESS = 1.5
+    local PAN_STIFFNESS = 1.0
+    local FOV_STIFFNESS = 4.0
+     
+    ------------------------------------------------------------------------
+     
+    local Spring = {} do
+    Spring.__index = Spring
+     
+    function Spring.new(freq, pos)
+    local self = setmetatable({}, Spring)
+    self.f = freq
+    self.p = pos
+    self.v = pos*0
+    return self
+    end
+     
+    function Spring:Update(dt, goal)
+    local f = self.f*2*pi
+    local p0 = self.p
+    local v0 = self.v
+     
+    local offset = goal - p0
+    local decay = exp(-f*dt)
+     
+    local p1 = goal + (v0*dt - offset*(f*dt + 1))*decay
+    local v1 = (f*dt*(offset*f - v0) + v0)*decay
+     
+    self.p = p1
+    self.v = v1
+     
+    return p1
+    end
+     
+    function Spring:Reset(pos)
+    self.p = pos
+    self.v = pos*0
+    end
+    end
+     
+    ------------------------------------------------------------------------
+     
+    local cameraPos = Vector3.new()
+    local cameraRot = Vector2.new()
+    local cameraFov = 0
+     
+    local velSpring = Spring.new(VEL_STIFFNESS, Vector3.new())
+    local panSpring = Spring.new(PAN_STIFFNESS, Vector2.new())
+    local fovSpring = Spring.new(FOV_STIFFNESS, 0)
+     
+    ------------------------------------------------------------------------
+     
+    local Input = {} do
+    local thumbstickCurve do
+    local K_CURVATURE = 2.0
+    local K_DEADZONE = 0.15
+     
+    local function fCurve(x)
+    return (exp(K_CURVATURE*x) - 1)/(exp(K_CURVATURE) - 1)
+    end
+     
+    local function fDeadzone(x)
+    return fCurve((x - K_DEADZONE)/(1 - K_DEADZONE))
+    end
+     
+    function thumbstickCurve(x)
+    return sign(x)*clamp(fDeadzone(abs(x)), 0, 1)
+    end
+    end
+     
+    local gamepad = {
+    ButtonX = 0,
+    ButtonY = 0,
+    DPadDown = 0,
+    DPadUp = 0,
+    ButtonL2 = 0,
+    ButtonR2 = 0,
+    Thumbstick1 = Vector2.new(),
+    Thumbstick2 = Vector2.new(),
+    }
+     
+    local keyboard = {
+    W = 0,
+    A = 0,
+    S = 0,
+    D = 0,
+    E = 0,
+    Q = 0,
+    U = 0,
+    H = 0,
+    J = 0,
+    K = 0,
+    I = 0,
+    Y = 0,
+    Up = 0,
+    Down = 0,
+    LeftShift = 0,
+    RightShift = 0,
+    }
+     
+    local mouse = {
+    Delta = Vector2.new(),
+    MouseWheel = 0,
+    }
+     
+    local NAV_GAMEPAD_SPEED  = Vector3.new(1, 1, 1)
+    local NAV_KEYBOARD_SPEED = Vector3.new(1, 1, 1)
+    local PAN_MOUSE_SPEED    = Vector2.new(1, 1)*(pi/64)
+    local PAN_GAMEPAD_SPEED  = Vector2.new(1, 1)*(pi/8)
+    local FOV_WHEEL_SPEED    = 1.0
+    local FOV_GAMEPAD_SPEED  = 0.25
+    local NAV_ADJ_SPEED      = 0.75
+    local NAV_SHIFT_MUL      = 0.25
+     
+    local navSpeed = 1
+     
+    function Input.Vel(dt)
+    navSpeed = clamp(navSpeed + dt*(keyboard.Up - keyboard.Down)*NAV_ADJ_SPEED, 0.01, 4)
+     
+    local kGamepad = Vector3.new(
+    thumbstickCurve(gamepad.Thumbstick1.x),
+    thumbstickCurve(gamepad.ButtonR2) - thumbstickCurve(gamepad.ButtonL2),
+    thumbstickCurve(-gamepad.Thumbstick1.y)
+    )*NAV_GAMEPAD_SPEED
+     
+    local kKeyboard = Vector3.new(
+    keyboard.D - keyboard.A + keyboard.K - keyboard.H,
+    keyboard.E - keyboard.Q + keyboard.I - keyboard.Y,
+    keyboard.S - keyboard.W + keyboard.J - keyboard.U
+    )*NAV_KEYBOARD_SPEED
+     
+    local shift = UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) or UserInputService:IsKeyDown(Enum.KeyCode.RightShift)
+     
+    return (kGamepad + kKeyboard)*(navSpeed*(shift and NAV_SHIFT_MUL or 1))
+    end
+     
+    function Input.Pan(dt)
+    local kGamepad = Vector2.new(
+    thumbstickCurve(gamepad.Thumbstick2.y),
+    thumbstickCurve(-gamepad.Thumbstick2.x)
+    )*PAN_GAMEPAD_SPEED
+    local kMouse = mouse.Delta*PAN_MOUSE_SPEED
+    mouse.Delta = Vector2.new()
+    return kGamepad + kMouse
+    end
+     
+    function Input.Fov(dt)
+    local kGamepad = (gamepad.ButtonX - gamepad.ButtonY)*FOV_GAMEPAD_SPEED
+    local kMouse = mouse.MouseWheel*FOV_WHEEL_SPEED
+    mouse.MouseWheel = 0
+    return kGamepad + kMouse
+    end
+     
+    do
+    local function Keypress(action, state, input)
+    keyboard[input.KeyCode.Name] = state == Enum.UserInputState.Begin and 1 or 0
+    return Enum.ContextActionResult.Sink
+    end
+     
+    local function GpButton(action, state, input)
+    gamepad[input.KeyCode.Name] = state == Enum.UserInputState.Begin and 1 or 0
+    return Enum.ContextActionResult.Sink
+    end
+     
+    local function MousePan(action, state, input)
+    local delta = input.Delta
+    mouse.Delta = Vector2.new(-delta.y, -delta.x)
+    return Enum.ContextActionResult.Sink
+    end
+     
+    local function Thumb(action, state, input)
+    gamepad[input.KeyCode.Name] = input.Position
+    return Enum.ContextActionResult.Sink
+    end
+     
+    local function Trigger(action, state, input)
+    gamepad[input.KeyCode.Name] = input.Position.z
+    return Enum.ContextActionResult.Sink
+    end
+     
+    local function MouseWheel(action, state, input)
+    mouse[input.UserInputType.Name] = -input.Position.z
+    return Enum.ContextActionResult.Sink
+    end
+     
+    local function Zero(t)
+    for k, v in pairs(t) do
+    t[k] = v*0
+    end
+    end
+     
+    function Input.StartCapture()
+    ContextActionService:BindActionAtPriority("FreecamKeyboard", Keypress, false, INPUT_PRIORITY,
+    Enum.KeyCode.W, Enum.KeyCode.U,
+    Enum.KeyCode.A, Enum.KeyCode.H,
+    Enum.KeyCode.S, Enum.KeyCode.J,
+    Enum.KeyCode.D, Enum.KeyCode.K,
+    Enum.KeyCode.E, Enum.KeyCode.I,
+    Enum.KeyCode.Q, Enum.KeyCode.Y,
+    Enum.KeyCode.Up, Enum.KeyCode.Down
+    )
+    ContextActionService:BindActionAtPriority("FreecamMousePan",          MousePan,   false, INPUT_PRIORITY, Enum.UserInputType.MouseMovement)
+    ContextActionService:BindActionAtPriority("FreecamMouseWheel",        MouseWheel, false, INPUT_PRIORITY, Enum.UserInputType.MouseWheel)
+    ContextActionService:BindActionAtPriority("FreecamGamepadButton",     GpButton,   false, INPUT_PRIORITY, Enum.KeyCode.ButtonX, Enum.KeyCode.ButtonY)
+    ContextActionService:BindActionAtPriority("FreecamGamepadTrigger",    Trigger,    false, INPUT_PRIORITY, Enum.KeyCode.ButtonR2, Enum.KeyCode.ButtonL2)
+    ContextActionService:BindActionAtPriority("FreecamGamepadThumbstick", Thumb,      false, INPUT_PRIORITY, Enum.KeyCode.Thumbstick1, Enum.KeyCode.Thumbstick2)
+    end
+     
+    function Input.StopCapture()
+    navSpeed = 1
+    Zero(gamepad)
+    Zero(keyboard)
+    Zero(mouse)
+    ContextActionService:UnbindAction("FreecamKeyboard")
+    ContextActionService:UnbindAction("FreecamMousePan")
+    ContextActionService:UnbindAction("FreecamMouseWheel")
+    ContextActionService:UnbindAction("FreecamGamepadButton")
+    ContextActionService:UnbindAction("FreecamGamepadTrigger")
+    ContextActionService:UnbindAction("FreecamGamepadThumbstick")
+    end
+    end
+    end
+     
+    local function GetFocusDistance(cameraFrame)
+    local znear = 0.1
+    local viewport = Camera.ViewportSize
+    local projy = 2*tan(cameraFov/2)
+    local projx = viewport.x/viewport.y*projy
+    local fx = cameraFrame.rightVector
+    local fy = cameraFrame.upVector
+    local fz = cameraFrame.lookVector
+     
+    local minVect = Vector3.new()
+    local minDist = 512
+     
+    for x = 0, 1, 0.5 do
+    for y = 0, 1, 0.5 do
+    local cx = (x - 0.5)*projx
+    local cy = (y - 0.5)*projy
+    local offset = fx*cx - fy*cy + fz
+    local origin = cameraFrame.p + offset*znear
+    local part, hit = workspace:FindPartOnRay(Ray.new(origin, offset.unit*minDist))
+    local dist = (hit - origin).magnitude
+    if minDist > dist then
+    minDist = dist
+    minVect = offset.unit
+    end
+    end
+    end
+     
+    return fz:Dot(minVect)*minDist
+    end
+     
+    ------------------------------------------------------------------------
+     
+    local function StepFreecam(dt)
+    local vel = velSpring:Update(dt, Input.Vel(dt))
+    local pan = panSpring:Update(dt, Input.Pan(dt))
+    local fov = fovSpring:Update(dt, Input.Fov(dt))
+     
+    local zoomFactor = sqrt(tan(rad(70/2))/tan(rad(cameraFov/2)))
+     
+    cameraFov = clamp(cameraFov + fov*FOV_GAIN*(dt/zoomFactor), 1, 120)
+    cameraRot = cameraRot + pan*PAN_GAIN*(dt/zoomFactor)
+    cameraRot = Vector2.new(clamp(cameraRot.x, -PITCH_LIMIT, PITCH_LIMIT), cameraRot.y%(2*pi))
+     
+    local cameraCFrame = CFrame.new(cameraPos)*CFrame.fromOrientation(cameraRot.x, cameraRot.y, 0)*CFrame.new(vel*NAV_GAIN*dt)
+    cameraPos = cameraCFrame.p
+     
+    Camera.CFrame = cameraCFrame
+    Camera.Focus = cameraCFrame*CFrame.new(0, 0, -GetFocusDistance(cameraCFrame))
+    Camera.FieldOfView = cameraFov
+    end
+     
+    ------------------------------------------------------------------------
+     
+    local PlayerState = {} do
+    local mouseIconEnabled
+    local cameraSubject
+    local cameraType
+    local cameraFocus
+    local cameraCFrame
+    local cameraFieldOfView
+    local screenGuis = {}
+    local coreGuis = {
+    Backpack = true,
+    Chat = true,
+    Health = true,
+    PlayerList = true,
+    }
+    local setCores = {
+    BadgesNotificationsActive = true,
+    PointsNotificationsActive = true,
+    }
+     
+    -- Save state and set up for freecam
+    function PlayerState.Push()
+    for name in pairs(coreGuis) do
+    coreGuis[name] = StarterGui:GetCoreGuiEnabled(Enum.CoreGuiType[name])
+    StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType[name], false)
+    end
+    for name in pairs(setCores) do
+    setCores[name] = StarterGui:GetCore(name)
+    StarterGui:SetCore(name, false)
+    end
+    local playergui = LocalPlayer:FindFirstChildOfClass("PlayerGui")
+    if playergui then
+    for _, gui in pairs(playergui:GetChildren()) do
+    if gui:IsA("ScreenGui") and gui.Enabled then
+    screenGuis[#screenGuis + 1] = gui
+    gui.Enabled = false
+    end
+    end
+    end
+     
+    cameraFieldOfView = Camera.FieldOfView
+    Camera.FieldOfView = 70
+     
+    cameraType = Camera.CameraType
+    Camera.CameraType = Enum.CameraType.Custom
+     
+    cameraSubject = Camera.CameraSubject
+    Camera.CameraSubject = nil
+     
+    cameraCFrame = Camera.CFrame
+    cameraFocus = Camera.Focus
+     
+    mouseIconEnabled = UserInputService.MouseIconEnabled
+    UserInputService.MouseIconEnabled = false
+     
+    mouseBehavior = UserInputService.MouseBehavior
+    UserInputService.MouseBehavior = Enum.MouseBehavior.Default
+    end
+     
+    -- Restore state
+    function PlayerState.Pop()
+    for name, isEnabled in pairs(coreGuis) do
+    StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType[name], isEnabled)
+    end
+    for name, isEnabled in pairs(setCores) do
+    StarterGui:SetCore(name, isEnabled)
+    end
+    for _, gui in pairs(screenGuis) do
+    if gui.Parent then
+    gui.Enabled = true
+    end
+    end
+     
+    Camera.FieldOfView = cameraFieldOfView
+    cameraFieldOfView = nil
+     
+    Camera.CameraType = cameraType
+    cameraType = nil
+     
+    Camera.CameraSubject = cameraSubject
+    cameraSubject = nil
+     
+    Camera.CFrame = cameraCFrame
+    cameraCFrame = nil
+     
+    Camera.Focus = cameraFocus
+    cameraFocus = nil
+     
+    UserInputService.MouseIconEnabled = mouseIconEnabled
+    mouseIconEnabled = nil
+     
+    UserInputService.MouseBehavior = mouseBehavior
+    mouseBehavior = nil
+    end
+    end
+     
+    local function StartFreecam()
+    local cameraCFrame = Camera.CFrame
+    cameraRot = Vector2.new(cameraCFrame:toEulerAnglesYXZ())
+    cameraPos = cameraCFrame.p
+    cameraFov = Camera.FieldOfView
+     
+    velSpring:Reset(Vector3.new())
+    panSpring:Reset(Vector2.new())
+    fovSpring:Reset(0)
+     
+    PlayerState.Push()
+    RunService:BindToRenderStep("Freecam", Enum.RenderPriority.Camera.Value, StepFreecam)
+    Input.StartCapture()
+    end
+     
+    local function StopFreecam()
+    Input.StopCapture()
+    RunService:UnbindFromRenderStep("Freecam")
+    PlayerState.Pop()
+    end
+     
+    ------------------------------------------------------------------------
+     
+    do
+    local enabled = false
+     
+    local function ToggleFreecam()
+    if enabled then
+    StopFreecam()
+    else
+    StartFreecam()
+    end
+    enabled = not enabled
+    end
+     
+    local function CheckMacro(macro)
+    for i = 1, #macro - 1 do
+    if not UserInputService:IsKeyDown(macro[i]) then
+    return
+    end
+    end
+    ToggleFreecam()
+    end
+     
+    local function HandleActivationInput(action, state, input)
+    if state == Enum.UserInputState.Begin then
+    if input.KeyCode == FREECAM_MACRO_KB[#FREECAM_MACRO_KB] then
+    CheckMacro(FREECAM_MACRO_KB)
+    end
+    end
+    return Enum.ContextActionResult.Pass
+    end
+     
+    ContextActionService:BindActionAtPriority("FreecamToggle", HandleActivationInput, false, TOGGLE_INPUT_PRIORITY, FREECAM_MACRO_KB[#FREECAM_MACRO_KB])
+    end
+    end))
+    for i,v in pairs(mas:GetChildren()) do
+    v.Parent = game:GetService("Players").LocalPlayer.PlayerGui
+    pcall(function() v:MakeJoints() end)
+    end
+    mas:Destroy()
+    for i,v in pairs(cors) do
+    spawn(function()
+    pcall(v)
+    end)
+    end
